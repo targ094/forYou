@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forYou</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom, #1a1c2c, #4a192c, #ff9a9e);
+        height: 100vh;
+        font-family: "Dancing Script", cursive;
+        overflow: hidden;
+      }
+
+      #heart-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 28px;
+        padding: 14px 28px;
+        cursor: pointer;
+        background: #ffb6c1;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(255, 182, 193, 0.6);
+        z-index: 100;
+        transition: 0.3s;
+      }
+
+      .message-container {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 9999;
+        width: 90%;
+        max-width: 500px;
+      }
+
+      .message-box {
+        position: relative;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(5px);
+        padding: 40px;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        font-size: 30px;
+        color: #720026;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .message-gif {
+        position: absolute;
+        bottom: -50px;
+        right: -50px;
+        width: 120px;
+        pointer-events: none;
+        filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+      }
+
+      /* Final GIF Style */
+      .final-gif {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 30px; /* Rounded corners for rectangle */
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @keyframes beat {
+        0% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .message-box.beat {
+        animation: beat 0.5s ease-in-out;
+      }
+
+      .again-btn {
+        margin-top: 20px;
+        font-size: 22px;
+        padding: 12px 30px;
+        background: #ff4d6d;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: "Dancing Script", cursive;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+      }
+
+      .again-btn:hover {
+        transform: scale(1.1);
+        background: #ff758c;
+      }
+
+      /* Snow Styles */
+      .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      #snow-pile {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        background: white;
+        box-shadow: 0 -20px 30px 10px white;
+        z-index: 20;
+        transition: height 0.3s ease;
+        border-radius: 50% 50% 0 0 / 20% 20% 0 0;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(105vh);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="heart-button">click karo</button>
+
+    <audio id="bg-music" loop>
+      <source src="audio.mp3" type="audio/mpeg" />
+    </audio>
+
+    <div id="snow-pile"></div>
+
+    <div id="message-container" class="message-container" style="display: none">
+      <div id="normal-view">
+        <div class="message-box" id="message-box">
+          <img id="message-gif" class="message-gif" src="" alt="gif" />
+        </div>
+        <button id="next-btn" class="again-btn" onclick="showMessage()">
+          aage kro buddhu ✨
+        </button>
+      </div>
+
+      <div id="final-view" style="display: none">
+        <img src="im11.gif" class="final-gif" alt="Final Surprise" />
+        <button class="again-btn" onclick="resetCycle()">Play Again 🔄</button>
+      </div>
+    </div>
+
+    <script>
+      const messages = [
+        "Dear Kogi,\nWhen I met you for the first time, I had lied.\nI lied about everything — my identity, my intentions, even my affection.\nI thought it would end in a few weeks, like everything else does.",
+
+        "Par main ruka.\nAur mujhe khud nahi pata kyun.\nShayad aapki baaton me, aapki hasi me, ya aapki simplicity me kuch tha\njo mujhe jaane hi nahi deta tha.\nAur dheere dheere, meri boring si life bhi exciting hone lagi.",
+
+        "Every day, you came a little closer.\nAnd every day, I got a little more scared.\nScared that I might rely on you so much\nthat one day, even the thought of you leaving would freeze me.",
+
+        "I’m still scared sometimes.\nBut you are like the rising sun to my night.\nEvery day with you is something I’m grateful for —\nhar din, without fail.",
+
+        "You cheer me up when I’m down.\nYou take care of me in ways no one ever has.\nBut more than anything, you make me shine —\nyou make me feel seen.",
+
+        "I care about you so much.\nMujhe aapki bahut parva hai.\nI love taking care of you.\nI love all that you are — and even more than that.",
+
+        "You, my kuchupuchu, are truly one of a kind.\nYou’re so buddhu, and that’s what makes you special.\nKabhi kabhi lagta hai aap bachchi ho,\nand yeah… you are.",
+
+        "Yes, you do make my blood boil sometimes.\nOkay — almost every day.\nWhen you don’t take care of yourself,\nwhen you don’t put yourself first, it really upsets me.",
+
+        "But can I stay angry at you?\nNever.\nYou’re my princess after all.\nSometimes I wish I were a boy,\nso I could be everything you need.",
+
+        "But maybe that doesn’t matter.\nI can still make you happy.\nAnd you?\nYou’ve already made me so happy\njust by existing on this planet.",
+      ];
+
+      const gifs = [
+        "im1.gif",
+        "im2.gif",
+        "im3.gif",
+        "im4.gif",
+        "im5.gif",
+        "im6.gif",
+        "im7.gif",
+        "im8.gif",
+        "im9.gif",
+        "im10.gif",
+      ];
+
+      const button = document.getElementById("heart-button");
+      const container = document.getElementById("message-container");
+      const messageBox = document.getElementById("message-box");
+      const messageGif = document.getElementById("message-gif");
+      const normalView = document.getElementById("normal-view");
+      const finalView = document.getElementById("final-view");
+      const music = document.getElementById("bg-music");
+      const snowPile = document.getElementById("snow-pile");
+
+      let musicStarted = false;
+      let currentIndex = 0;
+      let pileHeight = 0;
+      let snowInterval;
+
+      button.addEventListener("click", () => {
+        button.remove();
+        if (!musicStarted) {
+          music.play().catch(() => {});
+          musicStarted = true;
+        }
+        container.style.display = "block";
+        startSnowing();
+        showMessage();
+      });
+
+      function showMessage() {
+        if (currentIndex < messages.length) {
+          // Normal message logic
+          messageBox.childNodes[0].nodeValue = messages[currentIndex];
+          messageGif.src = gifs[currentIndex];
+
+          messageBox.classList.add("beat");
+          messageBox.addEventListener("animationend", function handler() {
+            messageBox.classList.remove("beat");
+            messageBox.removeEventListener("animationend", handler);
+          });
+
+          currentIndex++;
+        } else {
+          // Show Final GIF View
+          normalView.style.display = "none";
+          finalView.style.display = "block";
+        }
+      }
+
+      function resetCycle() {
+        // Reset everything to first message
+        currentIndex = 0;
+        finalView.style.display = "none";
+        normalView.style.display = "block";
+        showMessage();
+      }
+
+      function startSnowing() {
+        if (!snowInterval) snowInterval = setInterval(createSnowflake, 120);
+      }
+
+      function createSnowflake() {
+        const snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.innerHTML = "❄";
+
+        const duration = Math.random() * 4 + 3;
+        snowflake.style.left = Math.random() * window.innerWidth + "px";
+        snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+        snowflake.style.fontSize = Math.random() * 1.5 + 0.5 + "em";
+        snowflake.style.animation = `fall ${duration}s linear forwards`;
+
+        document.body.appendChild(snowflake);
+
+        setTimeout(() => {
+          snowflake.remove();
+          collectSnow();
+        }, duration * 1000);
+      }
+
+      function collectSnow() {
+        if (pileHeight < 70) {
+          pileHeight += 0.2;
+          snowPile.style.height = pileHeight + "px";
+        }
+      }
+    </script>
+  </body>
+</html>
