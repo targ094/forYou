@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>forYou</title>
+    <title>For You</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
@@ -18,6 +18,37 @@
         height: 100vh;
         font-family: "Dancing Script", cursive;
         overflow: hidden;
+      }
+
+      /* Image1.png Styling */
+      .decorative-image {
+        position: fixed;
+        bottom: 10px;
+        right: 80px; /* Right se thoda andar shifted */
+        width: 400px; /* Size thoda bada rakha hai */
+        z-index: 5; /* Snow pile ke piche ya upar adjust kar sakte hain */
+        pointer-events: none;
+      }
+
+      /* Twinkling Stars */
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: twinkle var(--duration) infinite ease-in-out;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
       }
 
       #heart-button {
@@ -50,55 +81,41 @@
 
       .message-box {
         position: relative;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(5px);
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(8px);
         padding: 40px;
         border-radius: 24px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        font-size: 30px;
+        font-size: 28px;
+        line-height: 1.4;
         color: #720026;
-        border: 2px solid rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .message-gif {
         position: absolute;
-        bottom: -50px;
-        right: -50px;
+        top: -70px;
+        /* bottom: 50px; */
+        left: -70px;
         width: 120px;
         pointer-events: none;
         filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
       }
 
-      /* Final GIF Style */
       .final-gif {
         width: 100%;
         max-width: 600px;
-        border-radius: 30px; /* Rounded corners for rectangle */
+        border-radius: 30px;
         box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
         margin-bottom: 20px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      @keyframes beat {
-        0% {
-          transform: scale(1);
-        }
-        30% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      .message-box.beat {
-        animation: beat 0.5s ease-in-out;
       }
 
       .again-btn {
-        margin-top: 20px;
+        margin-top: 30px;
         font-size: 22px;
         padding: 12px 30px;
         background: #ff4d6d;
@@ -111,9 +128,9 @@
         transition: 0.3s;
       }
 
-      .again-btn:hover {
-        transform: scale(1.1);
-        background: #ff758c;
+      .again-btn:disabled {
+        background: #ffb6c1;
+        cursor: default;
       }
 
       /* Snow Styles */
@@ -148,7 +165,9 @@
   </head>
 
   <body>
-    <button id="heart-button">click karo</button>
+    <img src="image1.png" alt="Decoration" class="decorative-image" />
+
+    <button id="heart-button">Click karo ✨</button>
 
     <audio id="bg-music" loop>
       <source src="audio.mp3" type="audio/mpeg" />
@@ -158,41 +177,32 @@
 
     <div id="message-container" class="message-container" style="display: none">
       <div id="normal-view">
-        <div class="message-box" id="message-box">
-          <img id="message-gif" class="message-gif" src="" alt="gif" />
-        </div>
-        <button id="next-btn" class="again-btn" onclick="showMessage()">
+        <div class="message-box" id="message-text"></div>
+        <img id="message-gif" class="message-gif" src="" alt="gif" />
+        <button id="next-btn" class="again-btn" onclick="nextMessage()">
           aage kro buddhu ✨
         </button>
       </div>
 
       <div id="final-view" style="display: none">
         <img src="im11.gif" class="final-gif" alt="Final Surprise" />
+        <br />
         <button class="again-btn" onclick="resetCycle()">Play Again 🔄</button>
       </div>
     </div>
 
     <script>
       const messages = [
-        "Dear Kogi,\nWhen I met you for the first time, I had lied.\nI lied about everything — my identity, my intentions, even my affection.\nI thought it would end in a few weeks, like everything else does.",
-
-        "Par main ruka.\nAur mujhe khud nahi pata kyun.\nShayad aapki baaton me, aapki hasi me, ya aapki simplicity me kuch tha\njo mujhe jaane hi nahi deta tha.\nAur dheere dheere, meri boring si life bhi exciting hone lagi.",
-
-        "Every day, you came a little closer.\nAnd every day, I got a little more scared.\nScared that I might rely on you so much\nthat one day, even the thought of you leaving would freeze me.",
-
-        "I’m still scared sometimes.\nBut you are like the rising sun to my night.\nEvery day with you is something I’m grateful for —\nhar din, without fail.",
-
-        "You cheer me up when I’m down.\nYou take care of me in ways no one ever has.\nBut more than anything, you make me shine —\nyou make me feel seen.",
-
-        "I care about you so much.\nMujhe aapki bahut parva hai.\nI love taking care of you.\nI love all that you are — and even more than that.",
-
-        "You, my kuchupuchu, are truly one of a kind.\nYou’re so buddhu, and that’s what makes you special.\nKabhi kabhi lagta hai aap bachchi ho,\nand yeah… you are.",
-
-        "Yes, you do make my blood boil sometimes.\nOkay — almost every day.\nWhen you don’t take care of yourself,\nwhen you don’t put yourself first, it really upsets me.",
-
-        "But can I stay angry at you?\nNever.\nYou’re my princess after all.\nSometimes I wish I were a boy,\nso I could be everything you need.",
-
-        "But maybe that doesn’t matter.\nI can still make you happy.\nAnd you?\nYou’ve already made me so happy\njust by existing on this planet.",
+        "Dear Kogi,\nWhen I met you for the first time, I had lied. I lied about everything — my identity, my intentions and my promises. I thought it would end in a few weeks...",
+        "Par main ruka. Aur mujhe khud nahi pata kyun. Shayad aapki baaton me, aapki hasi me, ya aapki simplicity me kuch tha jo mujhe jaane hi nahi deta tha.",
+        "Every day, you came a little closer. And every day, I got a little more scared. Scared that I might rely on you so much that even the thought of you leaving would freeze me.",
+        "I’m still scared sometimes. But you are like the rising sun to my night. Every day with you is something I’m grateful for — har din, without fail.",
+        "You cheer me up when I’m down. You take care of me in ways no one ever has. But more than anything, you make me shine — you make me feel seen.",
+        "I care about you so much. Mujhe aapki bahut parva hai. I love taking care of you. I love all that you are — and even more than that.",
+        "You, my kuchupuchu, are truly one of a kind. You’re so buddhu, and that’s what makes you special. Kabhi kabhi lagta hai aap bachchi ho... and yeah, you are.",
+        "Yes, you do make my blood boil sometimes. Okay — almost every day. When you don’t take care of yourself, it really upsets me.",
+        "But can I stay angry at you? Never. You’re my princess after all. Sometimes I wish I were a boy, so I could be everything you need.",
+        "But maybe that doesn’t matter. I can still make you happy. And you? You’ve already made me so happy just by existing on this planet.",
       ];
 
       const gifs = [
@@ -208,87 +218,98 @@
         "im10.gif",
       ];
 
-      const button = document.getElementById("heart-button");
-      const container = document.getElementById("message-container");
-      const messageBox = document.getElementById("message-box");
-      const messageGif = document.getElementById("message-gif");
-      const normalView = document.getElementById("normal-view");
-      const finalView = document.getElementById("final-view");
-      const music = document.getElementById("bg-music");
-      const snowPile = document.getElementById("snow-pile");
-
-      let musicStarted = false;
       let currentIndex = 0;
+      let isTyping = false;
       let pileHeight = 0;
-      let snowInterval;
 
-      button.addEventListener("click", () => {
-        button.remove();
-        if (!musicStarted) {
-          music.play().catch(() => {});
-          musicStarted = true;
+      // Stars creation
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.width = star.style.height = Math.random() * 3 + "px";
+        star.style.left = Math.random() * 100 + "vw";
+        star.style.top = Math.random() * 70 + "vh";
+        star.style.setProperty("--duration", Math.random() * 3 + 2 + "s");
+        document.body.appendChild(star);
+      }
+
+      document
+        .getElementById("heart-button")
+        .addEventListener("click", function () {
+          this.remove();
+          document.getElementById("bg-music").play();
+          document.getElementById("message-container").style.display = "block";
+          startSnowing();
+          typeEffect();
+        });
+
+      function typeEffect() {
+        if (currentIndex >= messages.length) {
+          document.getElementById("normal-view").style.display = "none";
+          document.getElementById("final-view").style.display = "block";
+          return;
         }
-        container.style.display = "block";
-        startSnowing();
-        showMessage();
-      });
 
-      function showMessage() {
-        if (currentIndex < messages.length) {
-          // Normal message logic
-          messageBox.childNodes[0].nodeValue = messages[currentIndex];
-          messageGif.src = gifs[currentIndex];
+        isTyping = true;
+        document.getElementById("next-btn").disabled = true;
+        const textElement = document.getElementById("message-text");
+        const gifElement = document.getElementById("message-gif");
 
-          messageBox.classList.add("beat");
-          messageBox.addEventListener("animationend", function handler() {
-            messageBox.classList.remove("beat");
-            messageBox.removeEventListener("animationend", handler);
-          });
+        textElement.innerHTML = "";
+        gifElement.src = gifs[currentIndex];
 
+        let i = 0;
+        const fullText = messages[currentIndex];
+
+        function type() {
+          if (i < fullText.length) {
+            textElement.innerHTML += fullText.charAt(i);
+            i++;
+            setTimeout(type, 40); // Typing speed
+          } else {
+            isTyping = false;
+            document.getElementById("next-btn").disabled = false;
+          }
+        }
+        type();
+      }
+
+      function nextMessage() {
+        if (!isTyping) {
           currentIndex++;
-        } else {
-          // Show Final GIF View
-          normalView.style.display = "none";
-          finalView.style.display = "block";
+          typeEffect();
         }
       }
 
       function resetCycle() {
-        // Reset everything to first message
         currentIndex = 0;
-        finalView.style.display = "none";
-        normalView.style.display = "block";
-        showMessage();
+        document.getElementById("final-view").style.display = "none";
+        document.getElementById("normal-view").style.display = "block";
+        typeEffect();
       }
 
       function startSnowing() {
-        if (!snowInterval) snowInterval = setInterval(createSnowflake, 120);
+        setInterval(createSnowflake, 150);
       }
 
       function createSnowflake() {
-        const snowflake = document.createElement("div");
-        snowflake.classList.add("snowflake");
-        snowflake.innerHTML = "❄";
-
+        const flake = document.createElement("div");
+        flake.className = "snowflake";
+        flake.innerHTML = "❄";
         const duration = Math.random() * 4 + 3;
-        snowflake.style.left = Math.random() * window.innerWidth + "px";
-        snowflake.style.opacity = Math.random() * 0.7 + 0.3;
-        snowflake.style.fontSize = Math.random() * 1.5 + 0.5 + "em";
-        snowflake.style.animation = `fall ${duration}s linear forwards`;
-
-        document.body.appendChild(snowflake);
-
+        flake.style.left = Math.random() * window.innerWidth + "px";
+        flake.style.opacity = Math.random();
+        flake.style.fontSize = Math.random() * 1.5 + 0.5 + "em";
+        flake.style.animation = `fall ${duration}s linear forwards`;
+        document.body.appendChild(flake);
         setTimeout(() => {
-          snowflake.remove();
-          collectSnow();
+          flake.remove();
+          if (pileHeight < 70) {
+            pileHeight += 0.2;
+            document.getElementById("snow-pile").style.height =
+              pileHeight + "px";
+          }
         }, duration * 1000);
-      }
-
-      function collectSnow() {
-        if (pileHeight < 70) {
-          pileHeight += 0.2;
-          snowPile.style.height = pileHeight + "px";
-        }
       }
     </script>
   </body>
